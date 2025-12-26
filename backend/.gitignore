@@ -1,0 +1,47 @@
+# Backend (Rails) - Logs
+backend/log/*.log
+backend/log/*.log.*
+backend/log/development.log
+backend/log/test.log
+backend/log/production.log
+
+# Backend (Rails) - Databases
+backend/storage/*.sqlite3
+backend/storage/*.sqlite3-*
+backend/db/*.sqlite3
+backend/db/*.sqlite3-*
+
+# Backend (Rails) - Temporary files
+backend/tmp/
+backend/tmp/**/*
+
+# Backend (Rails) - PID files
+backend/tmp/pids/
+backend/tmp/pids/*.pid
+
+# Backend (Rails) - Cache
+backend/tmp/cache/
+backend/tmp/cache/**/*
+backend/.sass-cache/
+backend/public/assets/
+backend/public/packs/
+backend/public/packs-test/
+backend/node_modules/
+
+# Backend (Rails) - Uploads
+backend/public/uploads/
+backend/storage/
+
+# Backend (Rails) - Environment variables
+backend/.env
+backend/.env.local
+backend/.env.*.local
+
+# Backend (Rails) - Bootsnap cache
+backend/tmp/cache/bootsnap/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
