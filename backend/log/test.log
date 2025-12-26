@@ -1,0 +1,418 @@
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "memberships"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "memberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_organization_id" ON "memberships" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_user_id" ON "memberships" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "organizations"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "organizations" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "name" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "task_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_organization_id" ON "task_statistics" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_user_id" ON "task_statistics" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_assignee_id" ON "tasks" ("assignee_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_organization_id" ON "tasks" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "email" varchar, "name" varchar, "password_digest" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "amemberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_user_id" ON "amemberships" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_organization_id" ON "amemberships" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "amemberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "memberships"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "memberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "memberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_64267aab58"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_organization_id" ON "memberships" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_user_id" ON "memberships" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "memberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "amemberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "amemberships"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "amemberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_user_id" ON "amemberships" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_organization_id" ON "amemberships" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "amemberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "memberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "memberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "memberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_64267aab58"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+, CONSTRAINT "fk_rails_99326fb65d"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_organization_id" ON "memberships" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_user_id" ON "memberships" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "memberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "amemberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "amemberships"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atask_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_user_id" ON "atask_statistics" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_organization_id" ON "atask_statistics" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atask_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "task_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_c518deab35"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_organization_id" ON "task_statistics" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_user_id" ON "task_statistics" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "task_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "atask_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atask_statistics"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atask_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_user_id" ON "atask_statistics" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_organization_id" ON "atask_statistics" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atask_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "task_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_c518deab35"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+, CONSTRAINT "fk_rails_28d74b1c11"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_organization_id" ON "task_statistics" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_user_id" ON "task_statistics" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "task_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "atask_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atask_statistics"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_organization_id" ON "atasks" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_assignee_id" ON "atasks" ("assignee_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at" FROM "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_54673877db"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_assignee_id" ON "tasks" ("assignee_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_organization_id" ON "tasks" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at" FROM "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_organization_id" ON "atasks" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_assignee_id" ON "atasks" ("assignee_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at" FROM "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_54673877db"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+, CONSTRAINT "fk_rails_0016c50613"
+FOREIGN KEY ("assignee_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_assignee_id" ON "tasks" ("assignee_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_organization_id" ON "tasks" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","created_at","description","due_date","organization_id","status","title","updated_at" FROM "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251225084322)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20251225083028),
+(20251225083027),
+(20251225083026),
+(20251225083025);[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-25 08:48:34.353302', '2025-12-25 08:48:34.353303') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', 'eed41afb64f3e241b0ee3bf4b6e5547047e30127', '2025-12-25 08:48:34.353738', '2025-12-25 08:48:34.353739') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrganization Create (0.2ms)[0m  [1m[32mINSERT INTO "organizations" ("created_at", "name", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["created_at", "2025-12-25 08:48:34.389177"], ["name", "Test Org"], ["updated_at", "2025-12-25 08:48:34.389177"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrganization Create (0.1ms)[0m  [1m[32mINSERT INTO "organizations" ("created_at", "name", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["created_at", "2025-12-25 08:48:34.410828"], ["name", "Test Org"], ["updated_at", "2025-12-25 08:48:34.410828"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTask Create (0.1ms)[0m  [1m[32mINSERT INTO "tasks" ("assignee_id", "created_at", "description", "due_date", "organization_id", "status", "title", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["assignee_id", nil], ["created_at", "2025-12-25 08:48:34.411609"], ["description", nil], ["due_date", nil], ["organization_id", 1], ["status", 0], ["title", "New Task"], ["updated_at", "2025-12-25 08:48:34.411609"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mUser Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mUser Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("created_at", "email", "name", "password_digest", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["created_at", "2025-12-25 08:48:34.423634"], ["email", "[FILTERED]"], ["name", "User 1"], ["password_digest", "[FILTERED]"], ["updated_at", "2025-12-25 08:48:34.423634"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mUser Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.3ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE IF EXISTS "memberships"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "memberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_organization_id" ON "memberships" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_user_id" ON "memberships" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "organizations"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "organizations" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "name" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "task_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_organization_id" ON "task_statistics" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_user_id" ON "task_statistics" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "category" varchar, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_assignee_id" ON "tasks" ("assignee_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_organization_id" ON "tasks" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "users"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "users" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "email" varchar, "name" varchar, "password_digest" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE UNIQUE INDEX "index_users_on_email" ON "users" ("email")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "amemberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_user_id" ON "amemberships" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_organization_id" ON "amemberships" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "amemberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "memberships"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "memberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "memberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_64267aab58"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_organization_id" ON "memberships" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_user_id" ON "memberships" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "memberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "amemberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "amemberships"[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "amemberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_user_id" ON "amemberships" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_amemberships_on_organization_id" ON "amemberships" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "amemberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "memberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "memberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "memberships" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "role" varchar, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_64267aab58"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+, CONSTRAINT "fk_rails_99326fb65d"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_organization_id" ON "memberships" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_memberships_on_user_id" ON "memberships" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "memberships" ("id","created_at","organization_id","role","updated_at","user_id")
+                     SELECT "id","created_at","organization_id","role","updated_at","user_id" FROM "amemberships"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "amemberships"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atask_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_user_id" ON "atask_statistics" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_organization_id" ON "atask_statistics" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atask_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "task_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_c518deab35"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_organization_id" ON "task_statistics" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_user_id" ON "task_statistics" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "task_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "atask_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atask_statistics"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atask_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_user_id" ON "atask_statistics" ("user_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atask_statistics_on_organization_id" ON "atask_statistics" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atask_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "task_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "task_statistics" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "completed_tasks" integer, "completion_rate" float, "created_at" datetime(6) NOT NULL, "organization_id" integer NOT NULL, "total_tasks" integer, "updated_at" datetime(6) NOT NULL, "user_id" integer NOT NULL, CONSTRAINT "fk_rails_c518deab35"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+, CONSTRAINT "fk_rails_28d74b1c11"
+FOREIGN KEY ("user_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_organization_id" ON "task_statistics" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_task_statistics_on_user_id" ON "task_statistics" ("user_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "task_statistics" ("id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id")
+                     SELECT "id","completed_tasks","completion_rate","created_at","organization_id","total_tasks","updated_at","user_id" FROM "atask_statistics"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atask_statistics"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "category" varchar, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_organization_id" ON "atasks" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_assignee_id" ON "atasks" ("assignee_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at" FROM "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "category" varchar, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_54673877db"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_assignee_id" ON "tasks" ("assignee_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_organization_id" ON "tasks" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at" FROM "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN immediate TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "category" varchar, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_organization_id" ON "atasks" ("organization_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_assignee_id" ON "atasks" ("assignee_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at" FROM "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "assignee_id" integer, "category" varchar, "created_at" datetime(6) NOT NULL, "description" text, "due_date" datetime(6), "organization_id" integer NOT NULL, "status" integer, "title" varchar, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_54673877db"
+FOREIGN KEY ("organization_id")
+  REFERENCES "organizations" ("id")
+, CONSTRAINT "fk_rails_0016c50613"
+FOREIGN KEY ("assignee_id")
+  REFERENCES "users" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_assignee_id" ON "tasks" ("assignee_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_organization_id" ON "tasks" ("organization_id")[0m
+  [1m[35mSQL (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at")
+                     SELECT "id","assignee_id","category","created_at","description","due_date","organization_id","status","title","updated_at" FROM "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mCOMMIT TRANSACTION[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20251225112844)[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20251225084322),
+(20251225083028),
+(20251225083027),
+(20251225083026),
+(20251225083025);[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'test', '2025-12-26 08:07:04.703816', '2025-12-26 08:07:04.703817') RETURNING "key"[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "schema_sha1"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.0ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('schema_sha1', 'd4d2fca4b9009762d5806791005b4923c5054058', '2025-12-26 08:07:04.704156', '2025-12-26 08:07:04.704157') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrganization Create (0.1ms)[0m  [1m[32mINSERT INTO "organizations" ("created_at", "name", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["created_at", "2025-12-26 08:07:04.737582"], ["name", "Test Org"], ["updated_at", "2025-12-26 08:07:04.737582"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrganization Create (0.1ms)[0m  [1m[32mINSERT INTO "organizations" ("created_at", "name", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["created_at", "2025-12-26 08:07:04.750184"], ["name", "Test Org"], ["updated_at", "2025-12-26 08:07:04.750184"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mTask Create (0.1ms)[0m  [1m[32mINSERT INTO "tasks" ("assignee_id", "category", "created_at", "description", "due_date", "organization_id", "status", "title", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["assignee_id", nil], ["category", nil], ["created_at", "2025-12-26 08:07:04.750666"], ["description", nil], ["due_date", nil], ["organization_id", 1], ["status", 0], ["title", "New Task"], ["updated_at", "2025-12-26 08:07:04.750666"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mUser Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mUser Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mBEGIN deferred TRANSACTION[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mUser Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mUser Create (0.1ms)[0m  [1m[32mINSERT INTO "users" ("created_at", "email", "name", "password_digest", "updated_at") VALUES (?, ?, ?, ?, ?) RETURNING "id"[0m  [["created_at", "2025-12-26 08:07:04.761259"], ["email", "[FILTERED]"], ["name", "User 1"], ["password_digest", "[FILTERED]"], ["updated_at", "2025-12-26 08:07:04.761259"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mUser Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "users" WHERE "users"."email" = ? LIMIT ?[0m  [["email", "[FILTERED]"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mROLLBACK TRANSACTION[0m
